@@ -6,13 +6,17 @@ on:
 
 jobs:
   build:
-    runs-on: macos-26
+    runs-on: macos-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
-      - name: Xcode version
-        run: xcodebuild -version
+      - name: Select Xcode 26
+        run: |
+          XCODE=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)
+          echo "Using $XCODE"
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
 
       - name: Build app (unsigned)
         run: |
